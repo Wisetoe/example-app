@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Todo;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class TodoController extends Controller
@@ -13,46 +14,29 @@ class TodoController extends Controller
      */
     public function index()
     {
-        $todos=Todo::all();
+        $user = Auth::user();
+        $todos = $user->todos;
         return view('todo',compact('todos'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validated = $request->validate([
             'title' => 'required',
+            
         ]);
-
-        if ($validator->fails())
-        {
-            return redirect()->route('todos.index')->withErrors($validator);
-        }
 
         Todo::create([
-            'title'=>$request->get('title')
+            'title'=>$request->get('title'),
+            'user_id'=> Auth::id(),
         ]);
-
                return redirect()->route('todos.index')->with('success', 'Inserted');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -92,7 +76,8 @@ class TodoController extends Controller
      */
     public function destroy(string $id)
     {
-        Todo::where('id',$id)->delete();
-        return redirect()->route('todos.index')->with('success', 'Deleted Todo');
+        $todo = Todo::findOrFail($id);
+        $todo->delete();
+        return redirect()->route('todos.index')->with('success', 'Deleted successfully');
     }
 }

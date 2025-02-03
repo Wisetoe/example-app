@@ -83,7 +83,11 @@
                         </td>
                         <td>
                             <a href="{{route('todos.edit',['todo'=>$todo->id])}}" class="btn btn-info">Edit</a>
-                            <a href="{{route('todos.destory',['todo'=>$todo->id])}}" class="btn btn-danger">Delete</a>
+                            <form action="{{ route('todos.destroy', ['todo' => $todo->id]) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method("DELETE")
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
                         </td>
                     </tr>
 
