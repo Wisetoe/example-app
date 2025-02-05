@@ -14,6 +14,7 @@ class StoreTodoRequest extends FormRequest
             'is_completed'=> 'bool',
         ];
     }
+    
     public function authorize(): bool
     {
         return true;
