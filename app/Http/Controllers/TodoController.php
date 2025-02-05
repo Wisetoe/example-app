@@ -13,30 +13,31 @@ class TodoController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
-        $todos = $user->todos;
+        $todos = Auth::user()->todos;
+
         return view('todo',compact('todos'));
     }
-    public function store(StoreTodoRequest $request)
+    public function store(StoreTodoRequest $request, Todo $todo)
     {
-        $todo = auth()->user()->todos()->create($request->validated());
+        $todo = Auth::user()->todos()->create($request->validated());
+
         return redirect()->route('todos.index')->with('success', 'Inserted');
     }
-    public function edit(string $id)
+    public function edit(Todo $todo)
     {
-        $todo = Todo::findOrFail($id);
         return view('edit-todo',compact('todo'));
     }
     public function update(StoreTodoRequest $request, Todo $todo)
     {
         $todo->update($request->validated());
+
         return redirect()->route('todos.index')->with('success', 'Updated Todo');
     }
 
-    public function destroy(string $id)
+    public function destroy(Todo $todo)
     {
-        $todo = Todo::findOrFail($id);
         $todo->delete();
+
         return redirect()->route('todos.index')
                          ->with('success', 'Deleted successfully');
     }
