@@ -18,6 +18,25 @@
 </head>
 <body style="background-color: white;">
 
+<form method="GET" action="{{ route('todos.index') }}" class="mt-5">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <input type="text" name="search" class="form-control" placeholder="Поиск по названию" value="{{ request('search') }}">
+            </div>
+            <div class="col-4">
+                <select name="status" class="form-control">
+                    <option value="">Все статусы</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed</option>
+                    <option value="deferred" {{ request('status') == 'deferred' ? 'selected' : '' }}>Deferred</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Применить</button>
+            </div>
+        </div>
+    </form>
+
 <div class="row justify-content-center mt-5">
     <div class="col-lg-6">
         @if(session()->has('success'))
@@ -74,13 +93,7 @@
                         <th>{{$counter}}</th>
                         <td>{{$todo->title}}</td>
                         <td>{{$todo->created_at}}</td>
-                        <td>
-                            @if($todo->is_completed)
-                                <div class="badge bg-success">Completed</div>
-                            @else
-                                <div class="badge bg-warning">Not Completed</div>
-                            @endif
-                        </td>
+                        <td>{{ ucfirst($todo->status) }}</td>
                         <td>
                             <a href="{{route('todos.edit',['todo'=>$todo->id])}}" class="btn btn-info">Edit</a>
                             <form action="{{ route('todos.destroy', ['todo' => $todo->id]) }}" method="POST" style="display:inline;">

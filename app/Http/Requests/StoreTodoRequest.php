@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreTodoRequest extends FormRequest
@@ -11,7 +10,7 @@ class StoreTodoRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:150',
-            'is_completed'=> 'bool',
+            'status'=> 'nullable|in:pending,completed,deferred',
         ];
     }
     

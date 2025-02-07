@@ -31,9 +31,10 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Status</label>
-                    <select name="is_completed" id="" class="form-control">
-                        <option value="1" @if($todo->is_completed==1) selected @endif>Complete</option>
-                        <option value="0" @if($todo->is_completed==0) selected @endif>Not Complete</option>
+                    <select name="status" id="" class="form-control">
+                        <option value="pending" @if($todo->status=='pending') selected @endif>Pending</option>
+                        <option value="completed" @if($todo->status=='completed') selected @endif>Complete</option>
+                        <option value="deferred" @if($todo->status=='deferred') selected @endif>Deferred</option>
                     </select>
                 </div>
 

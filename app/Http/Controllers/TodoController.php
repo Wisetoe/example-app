@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTodoRequest;
 use App\Models\Todo;
+use App\Http\Requests\StoreTodoRequest;
+use App\Http\Requests\TodoFilterRequest;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,12 +12,13 @@ use Illuminate\Support\Facades\Validator;
 
 class TodoController extends Controller
 {
-    public function index()
+    public function index(TodoFilterRequest $request)
     {
-        $todos = Auth::user()->todos;
+        $todos = Auth::user()->todos()->filter($request->validated())->get();
 
-        return view('todo',compact('todos'));
+        return view('todo', compact('todos'));
     }
+
     public function store(StoreTodoRequest $request, Todo $todo)
     {
         $todo = Auth::user()->todos()->create($request->validated());

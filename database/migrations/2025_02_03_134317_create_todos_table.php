@@ -14,7 +14,7 @@ return new class extends Migration
                 ->constrained('users', 'id', 'todo_user_id')
                 ->onUpdate('cascade');
             $table->longText('title');
-            $table->boolean('is_completed')->default(false);
+            $table->enum('status', ['pending', 'completed', 'deferred'])->default('pending');
             $table->timestamps();
         });
     }
