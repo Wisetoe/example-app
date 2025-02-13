@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Status;
+
 use Illuminate\Foundation\Http\FormRequest;
 
 class TodoFilterRequest extends FormRequest
@@ -10,7 +12,7 @@ class TodoFilterRequest extends FormRequest
     {
         return [
             'search' => 'nullable|string|max:255',
-            'status' => 'nullable|in:pending,completed,deferred', 
+            'status' => 'nullable|in:' . implode(',', array_map(fn($case) => $case->value, Status::cases())), 
         ];
     }
     public function authorize()

@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Status;
+
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreTodoRequest extends FormRequest
@@ -10,7 +12,7 @@ class StoreTodoRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:150',
-            'status'=> 'nullable|in:pending,completed,deferred',
+            'status' => 'nullable|in:' . implode(',', array_map(fn($case) => $case->value, Status::cases())),
         ];
     }
     
