@@ -12,7 +12,7 @@ class TodoFilterRequest extends FormRequest
     {
         return [
             'search' => 'nullable|string|max:255',
-            'status' => 'nullable|in:' . implode(',', array_map(fn($case) => $case->value, Status::cases())), 
+            'status' => 'nullable|in:' . implode(',', array_map(fn($case) => $case->value, Status::cases())),
         ];
     }
     public function authorize()

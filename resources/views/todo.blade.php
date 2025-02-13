@@ -93,7 +93,7 @@
                         <th>{{$counter}}</th>
                         <td>{{$todo->title}}</td>
                         <td>{{$todo->created_at}}</td>
-                        <td>{{ ucfirst($todo->status) }}</td>
+                        <td>{{ ucfirst($todo->status->value) }}</td>
                         <td>
                             <a href="{{route('todos.edit',['todo'=>$todo->id])}}" class="btn btn-info">Edit</a>
                             <form action="{{ route('todos.destroy', ['todo' => $todo->id]) }}" method="POST" style="display:inline;">

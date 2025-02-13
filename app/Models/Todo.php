@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\Status;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,6 +15,10 @@ class Todo extends Model
         'status',
     ];
     
+    protected $casts = [
+        'status' => Status::class,
+    ];
+
     public function scopeFilter($query, $filters)
     {
         if(isset($filters['search'])) {
