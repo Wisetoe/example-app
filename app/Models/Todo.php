@@ -21,13 +21,13 @@ class Todo extends Model
 
     public function scopeFilter($query, $filters)
     {
-        if(isset($filters['search'])) {
-            return $query->where('title', 'like', '%' . $filters['search'] . '%');
-        };
+        $query->when($filters['search'] ?? null, function ($builder, $search) {
+            return $builder->where('title', 'like', '%' . $search . '%');
+        });
 
-        if (isset($filters['status'])) {
-            return $query->where('status', $filters['status']);
-        };
+        $query->when($filters['status'] ?? null, function ($builder, $status) {
+                return $builder->where('status', $status);
+        });
 
         return $query;
     }

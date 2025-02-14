@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\Status;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreTodoRequest extends FormRequest
 {    
@@ -12,7 +13,7 @@ class StoreTodoRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:150',
-            'status' => 'nullable|in:' . implode(',', array_map(fn($case) => $case->value, Status::cases())),
+            'status' => [Rule::enum(Status::class)],
         ];
     }
     
