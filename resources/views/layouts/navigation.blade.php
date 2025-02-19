@@ -22,7 +22,13 @@
                         {{ __('ToDO') }}
                     </x-nav-link>
                 </div>
-                
+                @if(auth()->user()->isAdmin())
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="url('/users')">
+                            {{ __('Users') }}
+                        </x-nav-link>
+                    </div>
+                @endif
             </div>
 
             <!-- Settings Dropdown -->

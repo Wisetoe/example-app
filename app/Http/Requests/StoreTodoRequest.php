@@ -13,6 +13,7 @@ class StoreTodoRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:150',
+            'user_id' => 'required|exists:users,id',
             'status' => [Rule::enum(Status::class)],
         ];
     }

@@ -3,17 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Todo;
+use App\Models\User;
 use App\Http\Requests\StoreTodoRequest;
 use App\Http\Requests\TodoFilterRequest;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use SebastianBergmann\Type\FalseType;
 
 class TodoController extends Controller
 {
     public function index(TodoFilterRequest $request)
     {
+        if (auth()->user()->isAdmin()) {
+            $todos = Todo::all(); 
+            $users = User::all(); 
+
+            return view('todo', compact('todos', 'users'));
+        }
+
         $todos = Auth::user()->todos()->filter($request->validated())->get();
 
         return view('todo', compact('todos'));
@@ -21,12 +30,23 @@ class TodoController extends Controller
 
     public function store(StoreTodoRequest $request, Todo $todo)
     {
+        if (auth()->user()->isAdmin()) {
+            $userId = $request->validated()['user_id'];
+            $todo = Todo::create(array_merge($request->validated(), ['user_id' => $userId]));
+
+            return redirect()->route('todos.index')->with('success', 'Inserted');;
+        }
         $todo = Auth::user()->todos()->create($request->validated());
 
         return redirect()->route('todos.index')->with('success', 'Inserted');
     }
     public function edit(Todo $todo)
     {
+        if (auth()->user()->isAdmin()) {
+            $users = User::all();
+
+            return view('edit-todo',compact('todo', 'users'));
+        }
         return view('edit-todo',compact('todo'));
     }
     public function update(StoreTodoRequest $request, Todo $todo)

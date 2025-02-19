@@ -63,6 +63,18 @@
         <div class="col-6">
             <input type="text" class="form-control" name="title" placeholder="Title">
         </div>
+        <div class="row-6" style="width:250px;">
+            @if(auth()->user()->isAdmin()) 
+                <select name="user_id" class="form-control" required>
+                    <option value="">Выберите пользователя</option>
+                    @foreach($users as $user)
+                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                    @endforeach
+                </select>
+            @else
+                <input type="hidden" name="user_id" value="{{ auth()->user()->id }}"> 
+            @endif
+        </div>
         <div class="col-auto">
             <button type="submit" class="btn btn-primary mb-3">Submit</button>
         </div>
@@ -81,6 +93,7 @@
                     <th scope="col">Name</th>
                     <th scope="col">Created at</th>
                     <th scope="col">Status</th>
+                    <th scope="col">User </th>
                     <th scope="col">Action</th>
                 </tr>
                 </thead>
@@ -94,6 +107,7 @@
                         <td>{{$todo->title}}</td>
                         <td>{{$todo->created_at}}</td>
                         <td>{{ ucfirst($todo->status->value) }}</td>
+                        <td>{{ $todo->user->name }}</td>
                         <td>
                             <a href="{{route('todos.edit',['todo'=>$todo->id])}}" class="btn btn-info">Edit</a>
                             <form action="{{ route('todos.destroy', ['todo' => $todo->id]) }}" method="POST" style="display:inline;">

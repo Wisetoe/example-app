@@ -37,7 +37,17 @@
                         <option value="deferred" @if($todo->status=='deferred') selected @endif>Deferred</option>
                     </select>
                 </div>
-
+                @if(auth()->user()->isAdmin()) <!-- Проверка, является ли пользователь администратором -->
+                    <div class="mb-3">
+                        <label class="form-label">Assign User</label>
+                        <select name="user_id" class="form-control" required>
+                            <option value="">Select User</option>
+                            @foreach($users as $user)
+                                <option value="{{ $user->id }}" @if($todo->user_id == $user->id) selected @endif>{{ $user->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
                 <div class="mb-3">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
