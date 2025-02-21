@@ -64,16 +64,18 @@
             <input type="text" class="form-control" name="title" placeholder="Title">
         </div>
         <div class="row-6" style="width:250px;">
-            @if(auth()->user()->isAdmin()) 
+        @can('isAdmin', auth()->user())
+            <div class="mb-3">
                 <select name="user_id" class="form-control" required>
                     <option value="">Выберите пользователя</option>
                     @foreach($users as $user)
                         <option value="{{ $user->id }}">{{ $user->name }}</option>
                     @endforeach
                 </select>
-            @else
-                <input type="hidden" name="user_id" value="{{ auth()->user()->id }}"> 
-            @endif
+            </div>
+        @else
+            <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+        @endcan
         </div>
         <div class="col-auto">
             <button type="submit" class="btn btn-primary mb-3">Submit</button>

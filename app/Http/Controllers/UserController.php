@@ -5,27 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Role;
 
-use Illuminate\Http\Request;
+use App\Enums\Roles;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserAddRequest;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+
 class UserController extends Controller
 {
-    public function index()
+    public function index(User $user)
     {
-        if (!auth()->check() || !auth()->user()->isAdmin()) {
-            return redirect('/')->with('error', 'У вас нет доступа к этой странице.');
-        }
-        $users = User::with('role')->get();
+        if (Gate::allows('isAdmin', $user)) {
+           $users = User::all();
 
-        return view('users.index', compact('users'));
+            return view('users.index', compact('users'));
+        }
+         return redirect('/')->with('error', 'У вас нет доступа к этой странице.');
     }
 
     public function create()
     {
-        $roles = Role::all();
-
-        return view('users.create', compact('roles'));
+        $roles = Roles::cases();
+        return view('users.create', compact( 'roles'));
     }
 
     public function store(UserAddRequest $request, User $user)
@@ -40,9 +42,9 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        $roles = Role::all(); 
+        $roles = Roles::cases();
 
-        return view('users.edit', compact('user', 'roles')); // Передаем пользователя и роли в представление
+        return view('users.edit', compact('user', 'roles'));
     }
 
     public function update(UserRequest $request, $userId)

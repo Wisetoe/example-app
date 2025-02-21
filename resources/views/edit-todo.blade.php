@@ -37,7 +37,7 @@
                         <option value="deferred" @if($todo->status=='deferred') selected @endif>Deferred</option>
                     </select>
                 </div>
-                @if(auth()->user()->isAdmin()) <!-- Проверка, является ли пользователь администратором -->
+                @can('isAdmin', auth()->user())
                     <div class="mb-3">
                         <label class="form-label">Assign User</label>
                         <select name="user_id" class="form-control" required>
@@ -47,7 +47,7 @@
                             @endforeach
                         </select>
                     </div>
-                @endif
+                @endcan
                 <div class="mb-3">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>

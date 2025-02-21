@@ -10,13 +10,14 @@ use App\Http\Requests\TodoFilterRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Gate;
 use SebastianBergmann\Type\FalseType;
 
 class TodoController extends Controller
 {
     public function index(TodoFilterRequest $request)
     {
-        if (auth()->user()->isAdmin()) {
+        if (Gate::allows('isAdmin', auth()->user())) {
             $todos = Todo::all(); 
             $users = User::all(); 
 
@@ -30,7 +31,7 @@ class TodoController extends Controller
 
     public function store(StoreTodoRequest $request, Todo $todo)
     {
-        if (auth()->user()->isAdmin()) {
+        if (Gate::allows('isAdmin', auth()->user())) {
             $userId = $request->validated()['user_id'];
             $todo = Todo::create(array_merge($request->validated(), ['user_id' => $userId]));
 
@@ -42,7 +43,7 @@ class TodoController extends Controller
     }
     public function edit(Todo $todo)
     {
-        if (auth()->user()->isAdmin()) {
+        if (Gate::allows('isAdmin', auth()->user())) {
             $users = User::all();
 
             return view('edit-todo',compact('todo', 'users'));

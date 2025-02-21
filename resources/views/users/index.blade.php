@@ -36,7 +36,7 @@
                                 <td>{{ $user->id }}</td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
-                                <td>{{ $user->role ? $user->role->name : '' }}</td> 
+                                <td>{{  ucfirst($user->role) }}</td> 
                                 <td>
                                     <a class="btn btn-warning" href="{{ route('users.edit', $user->id) }}">Редактировать</a>
                                     <form action="{{ route('users.destroy', $user) }}" method="POST" style="display:inline;">

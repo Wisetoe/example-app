@@ -39,11 +39,13 @@
             <input type="password" name="password_confirmation" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label class="form-label">Роль</label>
-            <select name="role_id" class="form-control" required>
-                @foreach ($roles as $role)
-                    <option value="{{ $role->id }}">{{ $role->name }}</option>
-                @endforeach
+            <label for="role">Роль</label>
+                <select name="role" class="form-control" required>
+                    @foreach($roles as $role)
+                        <option value="{{ $role->value }}">
+                            {{ ucfirst($role->value) }}
+                        </option>
+                    @endforeach
             </select>
         </div>
         <button type="submit" class="btn btn-success">Создать пользователя</button>
