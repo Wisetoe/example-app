@@ -17,7 +17,7 @@ class TodoController extends Controller
 {
     public function index(TodoFilterRequest $request)
     {
-        if (Gate::allows('isAdmin', auth()->user())) {
+        if (Gate::allows('viewAny', auth()->user())) {
             $todos = Todo::all(); 
             $users = User::all(); 
 
@@ -31,7 +31,7 @@ class TodoController extends Controller
 
     public function store(StoreTodoRequest $request, Todo $todo)
     {
-        if (Gate::allows('isAdmin', auth()->user())) {
+        if (Gate::allows('create', auth()->user())) {
             $userId = $request->validated()['user_id'];
             $todo = Todo::create(array_merge($request->validated(), ['user_id' => $userId]));
 
@@ -43,7 +43,7 @@ class TodoController extends Controller
     }
     public function edit(Todo $todo)
     {
-        if (Gate::allows('isAdmin', auth()->user())) {
+        if (Gate::allows('viewAny', auth()->user())) {
             $users = User::all();
 
             return view('edit-todo',compact('todo', 'users'));
@@ -59,9 +59,11 @@ class TodoController extends Controller
 
     public function destroy(Todo $todo)
     {
-        $todo->delete();
+        if (Gate::allows('delete', auth()->user())) {
+            $todo->delete();
 
-        return redirect()->route('todos.index')
-                         ->with('success', 'Deleted successfully');
+            return redirect()->route('todos.index')
+                            ->with('success', 'Deleted successfully');
+        }
     }
 }

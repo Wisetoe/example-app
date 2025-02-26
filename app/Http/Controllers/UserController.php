@@ -16,27 +16,37 @@ class UserController extends Controller
 {
     public function index(User $user)
     {
-        if (Gate::allows('isAdmin', $user)) {
-           $users = User::all();
+        if (Gate::allows('view', $user)) {
+            $users = User::all();
 
             return view('users.index', compact('users'));
         }
-         return redirect('/')->with('error', 'У вас нет доступа к этой странице.');
+
+        return redirect('/')->with('error', 'У вас нет доступа к этой странице.');
     }
 
-    public function create()
+    public function create(User $user)
     {
-        $roles = Roles::cases();
-        return view('users.create', compact( 'roles'));
+        if (Gate::allows('create', $user)) {
+            $roles = Roles::cases();
+
+            return view('users.create', compact( 'roles'));
+        }
+
+        return redirect('/')->with('error', 'У вас нет доступа к этой странице.');
     }
 
     public function store(UserAddRequest $request, User $user)
     {
-        $validatedData = $request->validated();
-        $validatedData['password'] = bcrypt($validatedData['password']);
-        $user->create($validatedData);
+        if (Gate::allows('create', $user)) {
+            $validatedData = $request->validated();
+            $validatedData['password'] = bcrypt($validatedData['password']);
+            $user->create($validatedData);
 
-        return redirect()->route('users.index')->with('success', 'Пользователь успешно создан!');
+            return redirect()->route('users.index')->with('success', 'Пользователь успешно создан!');
+        }
+
+        return redirect('/')->with('error', 'У вас нет доступа к этой странице.');
     }
 
     public function edit($id)
@@ -58,8 +68,10 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        $user->delete();
+        if (Gate::allows('delete', $user)) {
+            $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'Пользователь успешно удален!');
+            return redirect()->route('users.index')->with('success', 'Пользователь успешно удален!');
+        }
     }
 }

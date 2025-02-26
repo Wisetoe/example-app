@@ -22,7 +22,7 @@
                         {{ __('ToDO') }}
                     </x-nav-link>
                 </div>
-                @can('isAdmin', auth()->user())
+                @can('view', auth()->user())
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="url('/users')">
                             {{ __('Users') }}

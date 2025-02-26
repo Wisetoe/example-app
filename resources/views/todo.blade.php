@@ -64,7 +64,7 @@
             <input type="text" class="form-control" name="title" placeholder="Title">
         </div>
         <div class="row-6" style="width:250px;">
-        @can('isAdmin', auth()->user())
+        @can('create', auth()->user())
             <div class="mb-3">
                 <select name="user_id" class="form-control" required>
                     <option value="">Выберите пользователя</option>

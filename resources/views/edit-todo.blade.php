@@ -37,7 +37,7 @@
                         <option value="deferred" @if($todo->status=='deferred') selected @endif>Deferred</option>
                     </select>
                 </div>
-                @can('isAdmin', auth()->user())
+                @can('create', auth()->user())
                     <div class="mb-3">
                         <label class="form-label">Assign User</label>
                         <select name="user_id" class="form-control" required>
